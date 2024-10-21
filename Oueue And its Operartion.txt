@@ -1,0 +1,125 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SIZE 100
+
+struct Queue {
+    int data[MAX_SIZE];
+    int front;
+    int rear;
+};
+
+struct Queue queue;
+
+void initializeQueue() {
+    queue.front = -1;
+    queue.rear = -1;
+}
+
+int isEmpty() {
+    return queue.front == -1;
+}
+
+int isFull() {
+    return queue.rear == MAX_SIZE - 1;
+}
+
+void enqueue(int item) {
+    if (isFull()) {
+        printf("Queue Overflow\n");
+        return;
+    }
+    if (isEmpty()) {
+        queue.front = 0;
+    }
+    queue.data[++queue.rear] = item;
+}
+
+int dequeue() {
+    if (isEmpty()) {
+        printf("Queue Underflow\n");
+        return -1;
+    }
+    int item = queue.data[queue.front];
+    if (queue.front == queue.rear) {
+        queue.front = -1;
+        queue.rear = -1;
+    } else {
+        queue.front++;
+    }
+    return item;
+}
+
+void traverse() {
+    if (isEmpty()) {
+        printf("Queue is empty\n");
+        return;
+    }
+    printf("Queue elements: ");
+    for (int i = queue.front; i <= queue.rear; i++) {
+        printf("%d ", queue.data[i]);
+    }
+    printf("\n");
+}
+
+int search(int item) {
+    if (isEmpty()) {
+        printf("Queue is empty\n");
+        return -1;
+    }
+    for (int i = queue.front; i <= queue.rear; i++) {
+        if (queue.data[i] == item) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    initializeQueue();
+
+    int choice, item, index;
+
+    while (1) {
+        printf("1. Enqueue\n");
+        printf("2. Dequeue\n");
+        printf("3. Traverse\n");
+        printf("4. Search\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the item to enqueue: ");
+                scanf("%d", &item);
+                enqueue(item);
+                break;
+            case 2:
+                item = dequeue();
+                if (item != -1) {
+                    printf("Dequeued item: %d\n", item);
+                }
+                break;
+            case 3:
+                traverse();
+                break;
+            case 4:
+                printf("Enter the item to search: ");
+                scanf("%d", &item);
+                index = search(item);
+                if (index != -1) {
+                    printf("Item found at index %d\n", index);
+                } else {
+                    printf("Item not found\n");
+                }
+                break;
+            case 5:
+                exit(0);
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+
+    return 0;
+}
